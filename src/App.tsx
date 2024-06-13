@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 function App() {
   const [isOpened, setIsOpened] = useState<boolean>(false);
   return (
-    <div className="flex bg-[#C4C4C4]">
+    <div className="flex bg-[#F2F2F2]">
       <QueryClientProvider client={queryClient}>
         <Sidebar isOpened={isOpened} setIsOpened={setIsOpened} />
         <div className="w-full">

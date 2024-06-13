@@ -12,6 +12,13 @@ import { useState } from "react";
 import { cn } from "@/utils/cn";
 import { getNavigationLanguages } from "@/utils/Links";
 
+type LanguageType =
+  | "English"
+  | "Français"
+  | "Nederlands"
+  | "Español"
+  | "Deutsch";
+
 const Header = ({
   isOpened,
   setIsOpened,
@@ -19,6 +26,7 @@ const Header = ({
   isOpened: boolean;
   setIsOpened: (value: boolean) => void;
 }) => {
+  const [activeLang, setActiveLang] = useState<LanguageType>("English");
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [openLang, setOpenLang] = useState<boolean>(false);
   const languages = getNavigationLanguages();
@@ -57,16 +65,30 @@ const Header = ({
               {openLang && (
                 <div
                   onMouseLeave={() => setOpenLang(false)}
-                  className="absolute bg-white border border-[#EBEBEB] right-[150px] mt-[17px] py-[16px] rounded-md shadow-2xl transition duration-300"
+                  className="absolute bg-white border border-[#EBEBEB] right-[100px] mt-[17px] py-[16px] rounded-md shadow-2xl transition duration-300"
                 >
-                  <ul className="space-y-4">
+                  <ul className="space-y-2">
                     {languages.map(({ label, icon }, index: number) => (
                       <li
                         key={index * 5}
+                        onClick={() =>
+                          setActiveLang(
+                            label.toString().slice(0, -5) as LanguageType
+                          )
+                        }
                         className="cursor-pointer leading-normal px-[14px] text-[12px] flex items-center gap-[12px]"
                       >
                         {icon()}
-                        <span className="text-[#313131]">{label}</span>
+                        <span
+                          className={cn(
+                            "text-[#ADADAD]",
+                            activeLang === label.toString().slice(0, -5)
+                              ? "text-[#313131]"
+                              : ""
+                          )}
+                        >
+                          {label}
+                        </span>
                       </li>
                     ))}
                   </ul>

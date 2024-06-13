@@ -1,22 +1,16 @@
-import { ArticleType, Product, VisibleColumns, Worker } from "@/types";
-import { Fragment, useEffect, useState } from "react";
+import { Product, VisibleColumns, Worker } from "@/types";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { cn } from "@/utils/cn";
-import Modal from "@/components/Modal";
 import WorkerCard from "@/components/WorkerCard";
 import arrows from "@/assets/icons/arrows.svg";
 import setting from "@/assets/icons/seetingsIcon.svg";
 import search from "@/assets/icons/search.svg";
-import arrow from "@/assets/icons/arrow_down.svg";
-import Article from "@/components/Article";
-import DatePick from "@/components/DatePick";
+import CalendarDropDown from "@/components/CalendarDropDown";
+import ProductDetailsPopOver from "@/components/ProductDetailsPopOver";
 
 export const Violations = () => {
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [showCalendar, setShowCalendar] = useState<boolean>(false);
-  const [showViolations, setShowViolations] = useState<boolean>(false);
   const [visibleColumns, setVisibleColumns] = useState<VisibleColumns>([]);
-  const [violations, setViolations] = useState([]);
 
   // Fetch Workers
   const getWorkers = async () => {
@@ -88,33 +82,7 @@ export const Violations = () => {
                 placeholder="Search workers..."
               />
             </div>
-            <div
-              onClick={() => setShowCalendar(true)}
-              className="relative cursor-pointer flex items-center justify-between w-[192px] px-[9px] py-[1px] text-[12px] border-[#D8D8D8] border-[1px] rounded-[2px] bg-white"
-            >
-              <span>29/10/2022 - 29/11/2022</span>
-              <img src={arrow} alt="arrow" />
-              {showCalendar && (
-                <div
-                  onMouseLeave={() => setShowCalendar(false)}
-                  className="absolute border-[#D8D8D8] rounded-[2px] border-[1px] px-[15px] py-[12px] left-[-0.8px] top-[33px] w-[275px] bg-white"
-                >
-                  <div className="mb-[11px]">
-                    <p className="text-[11px] text-[#989797]">Date range</p>
-                    <select className="w-[129px] py-1 border bodrer-[#989797] rounded-sm">
-                      <option value="custom">Custom</option>
-                    </select>
-                  </div>
-                  <DatePick />
-                  <div className="flex justify-end gap-[12px]">
-                    <button className="text-gray-400">Cancel</button>
-                    <button className="bg-green-500 text-white border border-green-600 px-4 rounded-sm">
-                      Apply
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+            <CalendarDropDown />
             <select className="w-[183px] px-[9px] text-[12px] py-[8px] border-[#D8D8D8] border-[1px] rounded-[2px]">
               <option value="All Contractors">All Contractors</option>
             </select>
@@ -127,37 +95,38 @@ export const Violations = () => {
           <table className="w-full">
             <thead>
               <tr>
-                <th className="border-r-[1px] px-[14px] border-[#D8D8D8] w-[17px]">
+                <th className="relative border-r-[1px] px-[14px] border-[#D8D8D8] w-[17px]">
                   <div
                     className="cursor-pointer"
-                    onClick={() => setShowSettings(true)}
+                    onClick={() => setShowSettings(!showSettings)}
                   >
                     <img src={setting} alt="setting" />
                   </div>
                   {showSettings && (
-                    <Modal onClose={() => setShowSettings(false)}>
-                      <div className="bg-white py-[10px] px-[17px] shadow-custom rounded-sm border border-[#D8D8D8]">
-                        <h1 className="text-[11px] font-medium text-[#989797]">
-                          Select columns to display
-                        </h1>
-                        <div>
-                          {products?.map((product: Product) => (
-                            <label
-                              key={product.id + product.name}
-                              className=" select-none flex text-[11px] font-normal items-center gap-[10px] cursor-pointer"
-                            >
-                              <input
-                                checked={!!visibleColumns[product.id]}
-                                onChange={() => toggleColumn(product.id)}
-                                className="cursor-pointer"
-                                type="checkbox"
-                              />
-                              {product.name}
-                            </label>
-                          ))}
-                        </div>
+                    <div
+                      onMouseLeave={() => setShowSettings(false)}
+                      className="absolute left-[42px] top-16 w-[162px] bg-white py-[10px] px-[17px] shadow-xl rounded-sm border border-[#D8D8D8]"
+                    >
+                      <h1 className="text-[11px] font-medium text-[#989797]">
+                        Select columns to display
+                      </h1>
+                      <div>
+                        {products?.map((product: Product) => (
+                          <label
+                            key={product.id + product.name}
+                            className=" select-none flex text-[11px] font-normal items-center gap-[10px] cursor-pointer"
+                          >
+                            <input
+                              checked={!!visibleColumns[product.id]}
+                              onChange={() => toggleColumn(product.id)}
+                              className="cursor-pointer accent-[#3490c9]"
+                              type="checkbox"
+                            />
+                            {product.name}
+                          </label>
+                        ))}
                       </div>
-                    </Modal>
+                    </div>
                   )}
                 </th>
                 <th className="text-[12px] text-[#737373] border-r-[1px] border-[#D8D8D8] font-semibold font-lato">
@@ -178,9 +147,9 @@ export const Violations = () => {
             <tbody>
               {workers?.map((worker: Worker) => (
                 <tr key={worker.id}>
-                  <td className="text-[#909090] px-[14px] text-center border-t-[1px] border-r-[1px] border-[#D8D8D8] font-medium text-[12px]">
+                  <th className="text-[#909090] px-[14px] text-center border-t-[1px] border-r-[1px] border-[#D8D8D8] font-medium text-[12px]">
                     {worker.id}
-                  </td>
+                  </th>
                   <td className="w-[20%] border-t-[1px] border-r-[1px] px-[10px] border-[#D8D8D8]">
                     <WorkerCard
                       name={worker.name}
@@ -200,26 +169,11 @@ export const Violations = () => {
                             -
                           </span>
                         ) : (
-                          <div
-                            onClick={() => {
-                              setViolations(
-                                products.filter(
-                                  (el: Product) => product.id === el.id
-                                )[0].articles
-                              );
-                              setShowViolations(!showViolations);
-                            }}
-                            className={cn(
-                              "cursor-pointer h-[35px] leading-none text-[14px] grid items-center w-[35px] rounded-full mx-auto",
-                              product.count >= 10
-                                ? "bg-[#EF3C3C] text-white"
-                                : product.count === 0
-                                ? ""
-                                : "bg-[#F8CC23]"
-                            )}
-                          >
-                            {product.count}
-                          </div>
+                          <ProductDetailsPopOver
+                            product={product}
+                            products={products}
+                            worker={worker}
+                          />
                         )}
                       </td>
                     ) : null
@@ -228,27 +182,6 @@ export const Violations = () => {
               ))}
             </tbody>
           </table>
-          {showViolations && (
-            <Modal onClose={() => setShowViolations(false)}>
-              <div className="relative">
-                <div className="bg-white h-[575px] overflow-y-auto rounded-lg py-[10px] px-[12px] space-y-4">
-                  {violations.map((violation: ArticleType, index: number) => (
-                    <Fragment key={violation.id}>
-                      <Article
-                        id={violation.id}
-                        image={violation.image}
-                        description={violation.description}
-                        time={violation.time}
-                        key={violation.id}
-                      />
-                      {index !== violations.length - 1 && <hr />}
-                    </Fragment>
-                  ))}
-                </div>
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -mt-3 w-0 h-0 border-solid border-[6px] border-transparent border-b-white"></div>
-              </div>
-            </Modal>
-          )}
         </div>
       </div>
     </div>

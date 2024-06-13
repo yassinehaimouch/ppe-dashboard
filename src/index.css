@@ -4,6 +4,119 @@
 @tailwind components;
 @tailwind utilities;
 
+.react-aria-RangeCalendar {
+  width: fit-content;
+  max-width: 100%;
+  color: black;
+
+  & header {
+      display: flex;
+      align-items: center;
+      margin: 0 2px 0.3rem 2px;
+
+      .react-aria-Heading {
+          width: fit-content;
+          height: fit-content;
+          flex: 1;
+          margin: 0;
+          text-wrap: nowrap;
+          text-align: center;
+          font-size: 12px;
+      }
+  }
+
+  .react-aria-Button {
+      width: 1.25rem;
+      padding: 0;
+  }
+
+  & table {
+      border-collapse: collapse;
+
+      & td {
+          padding: 2px 0;
+      }
+  }
+  .react-aria-CalendarGridHeader{
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 30px
+  }
+
+  .react-aria-CalendarCell {
+      width: 27px;
+      line-height: 1.5rem;
+      text-align: center;
+      border-radius: 6px;
+      cursor: default;
+      outline: none;
+      forced-color-adjust: none;
+
+      &[data-outside-month] {
+          display: none;
+      }
+
+      &[data-pressed] {
+          background: gray;
+      }
+
+      &[data-focus-visible] {
+          outline: 2px solid green;
+          outline-offset: -2px;
+      }
+
+      &[data-selected] {
+          background: #42A4DF;
+          color: white;
+          border-radius: 0;
+
+          &[data-focus-visible] {
+              outline-color: black;
+              outline-offset: -3px;
+          }
+      }
+
+      &[data-selection-start] {
+          border-start-start-radius: 100%;
+          border-end-start-radius: 100%;
+      }
+
+      &[data-selection-end] {
+          border-start-end-radius: 100%;
+          border-end-end-radius: 100%;
+      }
+  }
+}
+
+/* Custom checkbox styling */
+.custom-checkbox {
+    -webkit-appearance: none; /* Remove default checkbox styling */
+    appearance: none; /* Remove default checkbox styling */
+    background-color: transparent; /* Background color of the checkbox */
+    border: 1px solid #000; /* Border color */
+    width: 16px; /* Checkbox width */
+    height: 16px; /* Checkbox height */
+    cursor: pointer; /* Pointer cursor on hover */
+    position: relative;
+    display: inline-block;
+  }
+  
+  .custom-checkbox:checked {
+    background-color: #000; /* Background color when checked */
+    border-color: #000; /* Border color when checked */
+  }
+  
+  .custom-checkbox:checked::after {
+    content: '✓'; /* Checkmark symbol */
+    font-size: 14px; /* Size of the checkmark */
+    color: white; /* Color of the checkmark */
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    line-height: 14px;
+  }
+  
+
 body {
   font-family: "Roboto", sans-serif;
   line-height: 30px;
